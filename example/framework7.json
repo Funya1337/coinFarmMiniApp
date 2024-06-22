@@ -1,0 +1,18 @@
+{
+  "cwd": "/Users/boris/projects/example",
+  "type": [
+    "web"
+  ],
+  "name": "My App",
+  "framework": "react",
+  "template": "blank",
+  "cssPreProcessor": false,
+  "bundler": "vite",
+  "theming": {
+    "customColor": false,
+    "color": "#007aff",
+    "darkMode": false,
+    "iconFonts": true
+  },
+  "customBuild": false
+}
