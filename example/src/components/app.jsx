@@ -13,7 +13,6 @@ import store from '../js/store';
 
 const MyApp = () => {
 
-
   // Framework7 Parameters
   const f7params = {
     name: 'My App',
@@ -23,6 +22,8 @@ const MyApp = () => {
   };
 
   f7ready(() => {
+
+    f7.setDarkMode(false);
 
     // Call F7 APIs here
   });

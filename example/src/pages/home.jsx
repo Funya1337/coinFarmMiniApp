@@ -1,55 +1,61 @@
 import axios from 'axios';
 import { useEffect, useState, React } from 'react';
-import { Navbar, Page, Block, Card, CardHeader, CardContent, Link, Button, Chip, List, ListItem } from 'framework7-react';
+import { Navbar, Page, Block, Card, CardHeader, CardContent, Link, Button, Gauge, List, ListItem } from 'framework7-react';
 import { useTelegram } from '../hooks/useTelegram';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
-  const [clicks, setClicks] = useState(0);
-  const [clickImpact, setClickImpact] = useState(0);
   const [localClicks, setLocalClicks] = useState(0);
   const { tg, onToggle } = useTelegram();
+
+  const gaugeValue = 10;
 
   useEffect(() => {
     tg.ready();
     tg.expand();
     axios
-      .post('https://9b78-62-217-191-169.ngrok-free.app/api/verify', {initData: tg.initData, tg})
+      .post(`${import.meta.env.VITE_SERVER_URL}/api/verify`, {initData: tg.initData, tg})
       .then((res) => {
-        setUserData(res.data.user);
-        setClicks(res.data.gameSession.clicks);
-        setClickImpactState(res.data.user.id);
+        setUserData(res.data);
       })
       .catch((err) => console.log(err))
   }, [])
  
   const clickAlert = () => {
-    tg.showAlert("test alert");
-  }
-
-  const setClickImpactState = async (uid) => {
-    await axios
-      .post(`https://9b78-62-217-191-169.ngrok-free.app/api/increment/impact/${uid}`)
-      .then((res) => {
-        setClickImpact(res.data.clickImpact);
-      })
-      .catch((err) => console.log(err))
+    tg.showAlert(`
+        Click impact: ${userData.gameSession?.clickImpact}
+    Total balance: ${userData.gameSession?.clicks}
+      `);
   }
 
   const updateClicks = async () => {
     await axios
-      .post(`https://9b78-62-217-191-169.ngrok-free.app/api/clicks/update/${localClicks}/${userData.id}`)
+      .post(`${import.meta.env.VITE_SERVER_URL}/api/clicks/update/${localClicks}/${userData.user?.id}`)
       .then((res) => {
-        setClicks(res.data.clicks);
+        setUserData((prevData) => ({
+          ...prevData,
+          gameSession: {
+            ...prevData.gameSession,
+            clicks: res.data.clicks
+          }
+        }));
       })
       .catch((err) => console.log(err))
   }
 
-  Telegram.WebApp.onEvent('mainButtonClicked', () => {
-    updateClicks();
-    setLocalClicks(0);
-    tg.MainButton.hide();
-  })
+  useEffect(() => {
+    const handleMainButtonClick = () => {
+      updateClicks();
+      setLocalClicks(0);
+      tg.MainButton.hide();
+    };
+
+    tg.onEvent('mainButtonClicked', handleMainButtonClick);
+
+    return () => {
+      tg.offEvent('mainButtonClicked', handleMainButtonClick);
+    };
+  }, [tg, updateClicks]);
 
   const handleClick = () => {
     if (!tg.MainButton.isVisible) {
@@ -57,18 +63,24 @@ const HomePage = () => {
       tg.MainButton.show();
     }
 
-    const updatedLocalClicks = parseFloat((localClicks + clickImpact).toFixed(6));
+    tg.HapticFeedback.impactOccurred("medium");
+
+    const updatedLocalClicks = parseFloat((localClicks + userData.gameSession?.clickImpact).toFixed(6));
     setLocalClicks(updatedLocalClicks);
   };
 
   return (
   <Page name='home'>
-    <Navbar large title={`Hi, ${userData.username}`}></Navbar>
+    {/* <Navbar large title={`Hi, ${userData.user?.username}`}></Navbar> */}
+    <Navbar title={`Hi, ${userData.user?.username}`}>
+        <Link onClick={clickAlert} slot="right">Stats</Link>
+      </Navbar>
     <Block>
       <div style={{ alignItems: 'center', display: 'flex', position: 'relative', justifyContent: 'center', flexDirection: 'column' }}>
         <img
           src="https://cdn-icons-png.flaticon.com/512/11451/11451888.png"
           width="150px"
+          unselectable="on"
           onClick={handleClick}
         />
         </div>
@@ -80,9 +92,26 @@ const HomePage = () => {
     <div className="demo-expandable-cards">
       <Card>
         <CardContent>
-          <h3>Storage</h3>
-          <h1>{localClicks}</h1>
-          <h5>Total balance: {clicks}</h5>
+        <div className="grid grid-cols-2 grid-gap">
+          <div>
+            <h3>Storage</h3>
+            <h1>{localClicks}</h1>
+            <h5>Total balance: {userData.gameSession?.clicks}</h5>
+          </div>
+          <div>
+            <Gauge
+              type="circle"
+              value={(localClicks * 100000).toFixed(2)}
+              size={150}
+              borderColor="#2196f3"
+              borderWidth={5}
+              valueText={`${(localClicks * 10000000).toFixed(0)}%`}
+              valueFontSize={30}
+              valueTextColor="#2196f3"
+              labelText="progress"
+            />
+          </div>
+        </div>
         </CardContent>
       </Card>
       <Card expandable>
