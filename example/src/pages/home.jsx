@@ -14,7 +14,7 @@ const HomePage = () => {
     tg.ready();
     tg.expand();
     axios
-      .post(`${import.meta.env.VITE_SERVER_URL}/api/verify`, {initData: tg.initData, tg})
+      .post(`${import.meta.env.VITE_SERVER_URL}/api/auth/verify`, {initData: tg.initData, tg})
       .then((res) => {
         setUserData(res.data);
       })
@@ -30,7 +30,7 @@ const HomePage = () => {
 
   const updateClicks = async () => {
     await axios
-      .post(`${import.meta.env.VITE_SERVER_URL}/api/clicks/update/${localClicks}/${userData.user?.id}`)
+      .post(`${import.meta.env.VITE_SERVER_URL}/api/user/${userData.user?.id}/click/add/${localClicks}/`)
       .then((res) => {
         setUserData((prevData) => ({
           ...prevData,
