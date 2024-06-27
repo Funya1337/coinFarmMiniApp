@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('./src')();
 // const { Telegraf, Markup } = require('telegraf');
-// const { message } = require('telegraf/filters')
+// const { message } = require('telegraf/filters');
 // const express = require('express');
 // const crypto = require('crypto');
 // const cors = require('cors');
@@ -87,25 +87,25 @@ require('./src')();
 // })
 
 // app.post("/api/clicks/update/:amount/:uid", async (req, res) => {
-//     console.log("post clicks update amount");
-//     const userId = req.params.uid;
-//     const amount = parseFloat(req.params.amount);
-//     try {
-//         let gameSession = await models.GameSession.findOne({ userId });
-//         if (!gameSession) {
-//             return res.status(404).send('Game session not found');
-//         }
-//         const updatedClicks = parseFloat((parseFloat(gameSession.clicks) + amount).toFixed(6));
-//         gameSession.clicks = updatedClicks;
-//         gameSession.updatedAt = Date.now();
-//         await gameSession.save()
-//         .then((savedGameSession) => {
-//             res.status(200).send({clicks: savedGameSession.clicks});
-//         })
-//         .catch((err) => res.status(500).send(err))
-//     } catch (err) {
-//         res.status(500).send(err.message);
-//     }
+    // console.log("post clicks update amount");
+    // const userId = req.params.uid;
+    // const amount = parseFloat(req.params.amount);
+    // try {
+    //     let gameSession = await models.GameSession.findOne({ userId });
+    //     if (!gameSession) {
+    //         return res.status(404).send('Game session not found');
+    //     }
+    //     const updatedClicks = parseFloat((parseFloat(gameSession.clicks) + amount).toFixed(6));
+    //     gameSession.clicks = updatedClicks;
+    //     gameSession.updatedAt = Date.now();
+    //     await gameSession.save()
+    //     .then((savedGameSession) => {
+    //         res.status(200).send({clicks: savedGameSession.clicks});
+    //     })
+    //     .catch((err) => res.status(500).send(err))
+    // } catch (err) {
+    //     res.status(500).send(err.message);
+    // }
 // })
 
 // app.post("/api/increment/:uid", async (req, res) => {
@@ -131,30 +131,30 @@ require('./src')();
 // })
 
 // app.post('/api/verify', checkSignature, async (req, res) => {
-//     const userDoc = await models.User.findOne({ userId: req.body.user.id }).exec();
+    // const userDoc = await models.User.findOne({ userId: req.body.user.id }).exec();
 
-//     if (!userDoc) {
-//         const userDoc = models.User({
-//             userId: req.body.user.id,
-//             username: req.body.user.username,
-//             firstName: req.body.user.first_name,
-//             lastName: req.body.user.last_name,
-//             authDate: req.body.authDate
-//         })
-//         const gameSessionDoc = models.GameSession({
-//             userId: req.body.user.id,
-//         })
-//         console.log("adding user to db");
-//         await userDoc.save();
-//         await gameSessionDoc.save();
-//     }
-//     const resData = {
-//         user: req.body.user,
-//         gameSession: await models.GameSession.findOne({ userId: req.body.user.id }).exec()
-//     };
-//     console.log(resData);
-//     console.log("user already exist");
-//     res.send(resData);
+    // if (!userDoc) {
+    //     const userDoc = models.User({
+    //         userId: req.body.user.id,
+    //         username: req.body.user.username,
+    //         firstName: req.body.user.first_name,
+    //         lastName: req.body.user.last_name,
+    //         authDate: req.body.authDate
+    //     })
+    //     const gameSessionDoc = models.GameSession({
+    //         userId: req.body.user.id,
+    //     })
+    //     console.log("adding user to db");
+    //     await userDoc.save();
+    //     await gameSessionDoc.save();
+    // }
+    // const resData = {
+    //     user: req.body.user,
+    //     gameSession: await models.GameSession.findOne({ userId: req.body.user.id }).exec()
+    // };
+    // console.log(resData);
+    // console.log("user already exist");
+    // res.send(resData);
 // })
 
 // app.get('/test', (req, res) => {
