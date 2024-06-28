@@ -5,12 +5,13 @@ export function useTelegram() {
         tg.close();
     }
 
-    const onToggle = () => {
-        // if (tg.MainButton.isVisible()) {
-        //     tg.MainButton.hide();
-        // } else {
-        //     tg.MainButton.show();
-        // }
+    const onToggle = (title) => {
+        if (tg.MainButton.isVisible) {
+            tg.MainButton.text = title;
+            tg.MainButton.hide();
+        } else {
+            tg.MainButton.show();
+        }
     }
 
     return {

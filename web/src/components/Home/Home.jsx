@@ -5,6 +5,7 @@ import { useTelegram } from "../../hooks/useTelegram";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "@telegram-apps/telegram-ui/dist/styles.css";
+import { useUser } from '../../contexts/UserContext';
 
 import {
   Button,
@@ -18,7 +19,7 @@ import {
 import "./Home.css";
 
 const Home = () => {
-  const [userData, setUserData] = useState({});
+  const { userData, setUserData } = useUser();
   const [storageAmount, setStorageAmount] = useState(0);
   const [localClicks, setLocalClicks] = useState(0);
   const [state, toggle] = useState(true);
@@ -35,7 +36,7 @@ const Home = () => {
     tg.ready();
     tg.expand();
     axios
-      .post(`https://b9ad-89-169-48-165.ngrok-free.app/api/auth/verify`, {
+      .post(`https://2b48-89-169-48-165.ngrok-free.app/api/auth/verify`, {
         initData: tg.initData,
         tg,
       })
@@ -70,7 +71,7 @@ const Home = () => {
 
   const updateStorage = async () => {
     await axios
-    .post(`https://b9ad-89-169-48-165.ngrok-free.app/api/user/${userData.user?.id}/storage/add/${localClicks}/`)
+    .post(`https://2b48-89-169-48-165.ngrok-free.app/api/user/${userData.user?.id}/storage/add/${localClicks}/`)
     .then((res) => {
       setUserData((prevData) => ({
         ...prevData,
@@ -90,9 +91,9 @@ const Home = () => {
     setStorageAmount(updatedStorageAmount);
   }
 
-  const handleRedirect = () => {
-    navigate('shop');
-  }
+  // const handleRedirect = () => {
+  //   navigate('shop');
+  // }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 61px)" }}>
@@ -144,8 +145,8 @@ const Home = () => {
           }}
         >
           <InlineButtons mode="bezeled">
-            <InlineButtons.Item onClick={handleRedirect} text="Shop">🔥</InlineButtons.Item>
-            <InlineButtons.Item text="Farm">💰</InlineButtons.Item>
+            <InlineButtons.Item onClick={() => navigate('shop')} text="Shop">🔥</InlineButtons.Item>
+            <InlineButtons.Item onClick={() => navigate('farm')} text="Farm">💰</InlineButtons.Item>
             <InlineButtons.Item text="Invite Friends">🚀</InlineButtons.Item>
           </InlineButtons>
         </div>

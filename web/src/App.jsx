@@ -11,6 +11,8 @@ import Shop from "./components/Shop/Shop";
 import {
   AppRoot
 } from "@telegram-apps/telegram-ui";
+import { UserProvider } from './contexts/UserContext';
+import Farm from "./components/Farm/Farm";
 
 const router = createBrowserRouter([
   {
@@ -21,14 +23,20 @@ const router = createBrowserRouter([
     path: "/shop",
     element: <Shop/>,
   },
+  {
+    path: "/farm",
+    element: <Farm/>,
+  },
 ]);
 
 const App = () => {
   
   return (
-    <AppRoot>
-      <RouterProvider router={router} />
-    </AppRoot>
+    <UserProvider>
+      <AppRoot>
+        <RouterProvider router={router} />
+      </AppRoot>
+    </UserProvider>
   );
 }
 
